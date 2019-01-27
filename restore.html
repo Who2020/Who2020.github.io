@@ -92,7 +92,7 @@
 					{
 						/*check if last page*/
 						if(index == categories.length)
-							window.location.href = 'results?res='+getResults();
+							window.location.href = 'results.html?res='+getResults();
 						h1.text(categories[index]);
 						d3.selectAll('svg').remove();
 						svg = d3.select('body').append('center').append('svg')
