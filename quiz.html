@@ -40,7 +40,7 @@
 				}
 				index = 0;
 				var h1 = d3.select('body').append('h1').style('font-size',50).style('color','#DDDDDD').attr('align','center');
-				d3.select('body').append('h2').style('color','#CCCCCC').attr('align','center').text('Select all the stances which you find an acceptable stance. Leave all unchecked if you have no opinion on it.');
+				d3.select('body').append('h2').style('color','#CCCCCC').attr('align','center').text('Select all the stances which you find acceptable. Leave all unchecked if you have no opinion on it.');
 				var size = 3;
 				var svg;
 				function getResults()
@@ -141,7 +141,7 @@
 							.style("font-size", "2px")
 							.attr("fill","#CCCCCC")
 							.text(function(d) {return d["option"+i];})
-							.filter(function(d) {return d["option"+i].length > 20 - 8;})
+							.filter(function(d) {return d["option"+i].length > 100 - 8;})
 							.attr('textLength',20 - size - 2)
 							.attr('lengthAdjust',"spacingAndGlyphs");
 					}
