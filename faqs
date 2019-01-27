@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<div class="Header">
+			<center><a href="index.html"><img src="images/Who2020.png" width="auto" height="100%"/></a></center>
+		</div>
+		<div class="Spacer"><img/></div>
+		<center>
+		<h1 style="color:#DDDDDD">FAQs</h1>
+		<div style="width:60%">
+			<h2>Why isn't [candidate] on the site?</h2>
+			<h3 align="justify">The candidates here are all the major Declared and Exploratory Committee candidates from the <a href="https://en.wikipedia.org/wiki/2020_Democratic_Party_presidential_primaries">Democratic Party Presidential Primaries 2020 page</a> and <a href="https://en.wikipedia.org/wiki/2020_Republican_Party_presidential_primaries">the Republican Party Presidential Primaries 2020 page</a>, plus Joe Biden and Bernie Sanders, since they consistently poll as the top 2 Democratic candidates. Minor candidates will not be added. If a major candidate is missing, it is likely that they recently declared, and they will be added soon. Save the results page url, and when they are added, you can use it to get the results with them included.<h3>
+			<br>
+			<h2>Why isn't [issue] on the site?</h2>
+			<h3 align="justify">Issues should ideally meet the following criteria to be on the site: they should be specific policies that candidates either support or do not, they should not be vague notions such as "centralized government versus state government", because that doesn't indicate in what aspect we're talking about. Additionally, there should be some variation between candidates, it should not be one candidate versus everyone else, as well as variation within parties, it should not be all the Democrats have one position, and all the Republicans have the other. Finally, it should be an issue that many candidates have a clear stance on. If you have an issue that meets these criteria, you can <a href="https://github.com/Who2020/Who2020.github.io/issues/new?assignees=&labels=&template=issue-report.md&title=">request it to be added</a><h3>
+			
+			<br>
+			<h2>Why does it list [candidate] as having [position]?</h2>
+			<h3 align="justify">Candidates positions were determined by looking at bills they cosponsored, present and past campaign websites, and quotes on various news sites. If I have outdated information, please <a href="https://github.com/Who2020/Who2020.github.io/issues/new?assignees=&labels=&template=issue-report.md&title=">let me know</a>, including a source.<h3>
+			<br>
+			<h2>Why are most of these issues Democrat issues?</h2>
+			<h3 align="justify">Because the Democratic primary is much larger than the Republican one, so most people who aren't sure which candidate to support will mostly be trying to decide between the Democrats. If I'd made this in 2016, it would have likely been skewed the other way.<h3>
+			<br>
+			<h2>Isn't this similar to [Website]?</h2>
+			<h3 align="justify">Yeah, probably. I kind of just wanted to make my own, with the option to select multiple acceptable answers.<h3>
+			<br>
+			<h2>Got other questions?</h2>
+			<h3><a href="https://github.com/Who2020/Who2020.github.io/issues/new?assignees=&labels=&template=issue-report.md&title=">Let me know</a><h3>
+		</div>
+		</center>
+	</body>
+</html>

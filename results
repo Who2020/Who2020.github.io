@@ -1,0 +1,229 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<div class="Header">
+			<center><a href="index.html"><img src="images/Who2020.png" width="auto" height="100%"/></a></center>
+		</div>
+		<div class="Spacer"><img/></div>
+		<script src="d3.v3.min.js" charset="utf-8"></script>
+		<script>
+			d3.csv("Policies.csv", function(policydata) {
+			d3.csv("Candidates.csv", function(candidatedata) {
+				categories = []
+				for(var i = 0; i < policydata.length; i++) {
+					categories.push(policydata[i].category);
+				}
+				chosen = []
+				var totalcount = 0;
+				for(var j = 0; j < policydata.length; j++) {
+					policydata[j].start = totalcount;
+					for(var k = 0; k < policydata[j].size; k++) {
+						chosen.push(false);
+					}
+					totalcount = totalcount + 1 * policydata[j].size;
+				}
+				var counts = []
+				categories = Array.from(new Set(categories));
+				for(var i = 0; i < categories.length; i++) {
+					var count = 0;
+					for(var j = 0; j < policydata.length; j++) {
+						if(policydata[j].category == categories[i])
+						{
+							policydata[j].index = count;
+							count = count + 1;
+							counts[i] = count;
+						}
+					}
+				}
+				index = 0;
+				var h1 = d3.select('body').append('h1').style('font-size',50).style('color','#DDDDDD').attr('align','center').text('Results');
+				var svg = d3.select('body').append('center').append('svg')
+						.attr('viewBox', "0 0 100 250")
+						.attr('preserveAspectRatio', "xMidYMid meet")
+						.attr('width', "100%");
+				var chars = "kLFwdhQutrZEy-8YseUz03Di4mqVCSvlAK9IP5RXpHG2jxbg_TnJMocf1BNaW67O";
+				map = [];
+				for(var i = 0; i < chars.length; i++)
+				{
+					map[chars[i]] = i;
+				}
+				var input = location.search.split('?res=');
+				if(input.length < 2)
+					window.location.href = 'index.html';
+				else
+				{
+					input = input[1]
+					for(var i = 0; i < input.length; i++)
+					{
+						var t = (map[input[i]] + 64 - 7 * i) % 64;
+						for(var j = 5; j >= 0; j--)
+						{
+							if(t%2 == 1)
+							{
+								chosen[j + i * 6] = true;
+								t--;
+							}
+							t = t / 2;
+						}
+					}
+					for(var k = 0; k < candidatedata.length; k++)
+					{
+						var totalmatched = 0;
+						var totalcount = 0;
+						candidatedata[k].categories = [];
+						for(var j = 0; j < categories.length; j++)
+						{
+							var matched = 0;
+							var total = 0;
+							for(var i = 0; i < policydata.length; i++)
+							{
+								if(policydata[i].category == categories[j])
+								{
+									var exists = false;
+									for(var m = 0; m < policydata[i].size; m++)
+										if(chosen[policydata[i].start + m])
+											exists = true;
+									if(exists)
+									{
+										total++;
+										if(chosen[policydata[i].start+1*candidatedata[k][policydata[i].brief]])
+											matched++;
+										var u = policydata[i].brief;
+										var v = candidatedata[k][policydata[i].brief];
+										var x = candidatedata[k].Name;
+										var y = policydata[i].start+1 * candidatedata[k][policydata[i].brief];
+										var q = chosen[policydata[i].start+1 * candidatedata[k][policydata[i].brief]];
+										var t = 4;
+									}
+								}
+							}
+							totalmatched+=matched;
+							totalcount+=total;
+							if(total == 0)
+								total= "??";
+							else
+								total = Math.round(matched * 100 / total); 
+							candidatedata[k].categories[categories[j]] = total;
+						}
+						if(totalcount == 0)
+							candidatedata[k].total = "??";
+						else
+							candidatedata[k].total = Math.round(totalmatched * 100 / totalcount);
+					}
+					 candidatedata.sort(function(a, b){return b.total-a.total});
+					var defs = svg.append('defs');
+					for(var i = 0; i < candidatedata.length; i++)
+					{
+						var n = candidatedata[i].Name.replace(/ /g,"").replace(/'/g,"");
+						defs.append('pattern')
+							.attr('id', n)
+							.attr('x', '0%')
+							.attr('y', '0%')
+							.attr('height', '100%')
+							.attr('width', '100%')
+							.attr('viewBox', '0 0 512 512')
+							.append('image')
+							.attr('x', '0%')
+							.attr('y', '0%')
+							.attr('height', '512')
+							.attr('width', '512')
+							.attr('xlink:href', 'images/'+n+".jpg");
+					}
+					var colors = ["4747AD", "276D27","AD4747",
+								"7E86AF", "5E8F66", "AF7E86",
+								"476E9B", "277B4E", "9B476E"];
+					var ent = svg.selectAll('rect')
+						.data(candidatedata)
+						.enter();
+					var a = 3;
+					var b = 6;
+					var text = svg.selectAll('text')
+						.data(candidatedata)
+						.enter();
+					ent.append('rect')
+						.attr('width', 80)
+						.attr('height', 20)
+						.attr('rx', 5)
+						.attr('ry', 5)
+						.attr('x', 10)
+						.attr('y', function(d, j) { return j * 21; })
+						.attr('fill', function(d, j) {return "#"+colors[j%colors.length];})
+					ent.append('rect')
+						.attr('width', 50)
+						.attr('height', 6)
+						.attr('rx', 2)
+						.attr('ry', 2)
+						.attr('x', function(d) {return 30;})
+						.attr('y', function(d, j) { return 5 + j * 21; })
+						.attr('fill', function(d, j) {return "#"+colors[(j+a)%colors.length];});
+					ent.append('text')
+						.attr('width', 50)
+						.attr('height', 6)
+						.attr('x', function(d) {return 33;})
+						.attr('y', function(d, j) { return 9 + j * 21; })
+						.style("font-size", "3px")
+						.text(function(d) {return d.Name;});
+					ent.append('rect')
+						.attr('width', 10)
+						.attr('height', 10)
+						.attr('rx', 4)
+						.attr('ry', 4)
+						.attr('x', 75)
+						.attr('y', function(d, j) { return 3 + j * 21; })
+						.attr('fill', function(d, j) {return "#"+colors[(j+b)%colors.length];});
+					ent.append('text')
+						.attr('width', 10)
+						.attr('height', 10)
+						.attr('x', function(d) {return 76;})
+						.attr('y', function(d, j) { return 9 + j * 21; })
+						.style("font-size", "4px")
+						.text(function(d) {return d.total+"%";});
+					for(var i = 0; i < categories.length; i++)
+					{
+						ent.append('rect')
+							.attr('width', 10)
+							.attr('height', 2)
+							.attr('rx', 1)
+							.attr('ry', 1.5)
+							.attr('x', function(d) {return 27 + i*12;})
+							.attr('y', function(d, j) { return 15 + j * 21; })
+							.attr('fill', function(d, j) {return "#"+colors[(j+a)%colors.length];});
+						ent.append('text')
+							.attr('width', 10)
+							.attr('height', 3)
+							.attr('x', function(d) {return 28 + i*12;})
+							.attr('y', function(d, j) { return 16.3 + j * 21; })
+							.style("font-size", "0.8px")
+							.text(function(d) {return categories[i];});
+						ent.append('rect')
+							.attr('width', 5)
+							.attr('height', 5)
+							.attr('rx', 4)
+							.attr('ry', 4)
+							.attr('x', function(d) {return 33 + i*12;})
+							.attr('y', function(d, j) { return 13 + j * 21; })
+							.attr('fill', function(d, j) {return "#"+colors[(j+b)%colors.length];});
+						ent.append('text')
+							.attr('width', 5)
+							.attr('height', 5)
+							.attr('x', function(d) {return 33.5 + i*12;})
+							.attr('y', function(d, j) { return 16.1 + j * 21; })
+							.style("font-size", "2px")
+							.text(function(d) {return d.categories[categories[i]] + "%";});
+					}
+					svg.selectAll('circle')
+						.data(candidatedata)
+						.enter().append('circle')
+						.attr('cx', 18)
+						.attr('cy', function(d, j) { return j * 21 + 10; })
+						.attr('r', 7)
+						.attr('fill', function(d) { return "url(#"+d.Name.replace(/ /g,"").replace(/'/g,"")+")";});
+				}
+			});});
+		</script>
+	</body>
+</html>

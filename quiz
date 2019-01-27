@@ -1,0 +1,168 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<div class="Header">
+			<center><a href="index.html"><img src="images/Who2020.png" width="auto" height="100%"/></a></center>
+		</div>
+		<div class="Spacer"><img/></div>
+		<script src="d3.v3.min.js" charset="utf-8"></script>
+		<script>
+			d3.csv("Policies.csv", function(policydata) {
+				categories = []
+				for(var i = 0; i < policydata.length; i++) {
+					categories.push(policydata[i].category);
+				}
+				chosen = []
+				var totalcount = 0;
+				for(var j = 0; j < policydata.length; j++) {
+					policydata[j].start = totalcount;
+					for(var k = 0; k < policydata[j].size; k++) {
+						chosen.push(false);
+					}
+					totalcount = totalcount + 1 * policydata[j].size;
+				}
+				var counts = []
+				categories = Array.from(new Set(categories));
+				for(var i = 0; i < categories.length; i++) {
+					var count = 0;
+					for(var j = 0; j < policydata.length; j++) {
+						if(policydata[j].category == categories[i])
+						{
+							policydata[j].index = count;
+							count = count + 1;
+							counts[i] = count;
+						}
+					}
+				}
+				index = 0;
+				var h1 = d3.select('body').append('h1').style('font-size',50).style('color','#DDDDDD').attr('align','center');
+				d3.select('body').append('h2').style('color','#CCCCCC').attr('align','center').text('Select all the stances which you find an acceptable stance. Leave all unchecked if you have no opinion on it.');
+				var size = 3;
+				var svg;
+				function getResults()
+				{
+					var chars = "kLFwdhQutrZEy-8YseUz03Di4mqVCSvlAK9IP5RXpHG2jxbg_TnJMocf1BNaW67O"
+					res = "";
+					var k = 0;
+					while(k < chosen.length)
+					{
+						var t = 0;
+						for(var j = 0; j < 6; j++)
+						{
+							t = t * 2;
+							if(k < chosen.length && chosen[k])
+								t++;
+							k++;
+						}
+						res = res + chars[(t + 7 * res.length) % 64];
+					}
+					return res;
+				}
+				function refresh()
+				{
+					/*check if last page*/
+					if(index == categories.length)
+						window.location.href = 'results?res='+getResults();
+					h1.text(categories[index]);
+					d3.selectAll('svg').remove();
+					svg = d3.select('body').append('center').append('svg')
+						.attr('viewBox', "0 0 60 150")
+						.attr('preserveAspectRatio', "xMidYMid meet")
+						.attr('width', "60%");
+					svg.append('defs').append('pattern')
+						.attr('id', 'checkmark')
+						.attr('x', '0%')
+						.attr('y', '0%')
+						.attr('height', '100%')
+						.attr('width', '100%')
+						.attr('viewBox', '0 0 512 512')
+						.append('image')
+						.attr('x', '0%')
+						.attr('y', '0%')
+						.attr('height', '512')
+						.attr('width', '512')
+						.attr('xlink:href', 'images/checkbox.png');
+					window.scrollTo(0, 0);
+					var buttonenter = svg.selectAll('rect')
+						.data(policydata)
+						.enter();
+					var buttontext = svg.selectAll('text')
+						.data(policydata)
+						.enter();
+					var offset = 15;
+					buttontext.append('text')
+						.filter(function(d) {return d.category == categories[index]}).attr('width', 13)
+						.attr('height', 5)
+						.attr('x', offset + 4)
+						.attr('y', function(d) { return size + (d.index * 5 + 1) * (size+1); })
+						.style("font-size", "2px")
+						.style("font-weight", "bold")
+						.attr("fill","#DDDDDD")
+						.text(function(d) {return d.name;});
+					for(var i = 0; i < 4; i++)
+					{
+						buttonenter.append('rect')
+							.filter(function(d) {return d.category == categories[index] && d.size > i })
+							.attr('width', size)
+							.attr('height', size)
+							.attr('rx', size)
+							.attr('ry', size)
+							.attr("i", i)
+							.attr('x', offset + 5)
+							.attr('y', function(d) { return size+1 + (d.index * 5 + i + 1) * (size+1); })
+							.attr('fill', function(d) { if(chosen[1*d.start + i]) return "url(#checkmark)"; else return "#AA3333";})
+							.on("click", function() {
+								d3.select(this).attr('fill', function(d) { i2 = 1 * this.attributes.i.value; chosen[1*d.start + i2] = !chosen[1*d.start + i2]; if(chosen[1*d.start + i2]) return "url(#checkmark)"; else return "#AA3333";});
+							})
+							.on("mouseover", function(d) {
+								d3.select(this)
+									.transition()
+									.duration(500)
+									.attr("rx", 1)
+									.attr("ry", 1);
+							})
+							.on("mouseout", function(d) {
+								d3.select(this)
+									.transition()
+									.duration(250)
+									.attr("rx", size)
+									.attr("ry", size);
+							});
+						buttontext.append('text')
+							.filter(function(d) {return d.category == categories[index] && d.size > i })
+							.attr('width', 20 - size - 2)
+							.attr('height', size)
+							.attr('x', 6 + offset +  size)
+							.attr('y', function(d) { return size * 2 + (d.index * 5 + i + 1) * (size+1); })
+							.style("font-size", "2px")
+							.attr("fill","#CCCCCC")
+							.text(function(d) {return d["option"+i];})
+							.filter(function(d) {return d["option"+i].length > 20 - 8;})
+							.attr('textLength',20 - size - 2)
+							.attr('lengthAdjust',"spacingAndGlyphs");
+					}
+					addArrows();
+				}
+				function addArrows()
+				{
+					var y = size + (counts[index] * 5 + 1) * (size+1);
+					svg.selectAll('polygon').remove();
+					if(index > 0)
+					svg.append('polygon')
+						.attr('points',"20,"+y+" 20,"+(y+6)+" 15,"+(y+3))
+						.style("fill","#01DF74")
+						.on("click", function() { index--; refresh(); });
+					svg.append('polygon')
+						.attr('points',"40,"+y+" 40,"+(y+6)+" 45,"+(y+3))
+						.style("fill","#01DF74")
+						.on("click", function() { index++; refresh(); });
+				}
+				refresh();
+			});
+		</script>
+	</body>
+</html>

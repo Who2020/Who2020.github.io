@@ -1,0 +1,19 @@
+name,category,brief,size,option0,option1,option2,option3
+Minimum Wage,Economy,Wage,3,$15,$10.10,Current,
+Net Neutrality,Economy,Net,3,Support,No Clear Stance,Oppose,
+Healthcare,Economy,Healthcare,4,Medicare for All,Public Option,Universal Healthcare,Repeal Obamacare
+College,Economy,College,3,Free public college,Free community colleges,Reduce Costs,
+Climate Change,Economy,Climate,4,Green New Deal,Carbon Tax,Increase clean energy research,Nothing
+Campaign Finance Reform,Democracy,CampaignReform,3,Publicly Financed Elections,Overturn Citizens United,Money is speech,
+Paper Ballots,Democracy,PaperBallots,2,Yes,No,,
+Automatic Voter Registration,Democracy,AutomaticRegistration,2,Yes,No,,
+Voting Holiday,Democracy,Holiday,2,Yes,No,,
+Universal Background Check,Freedom,BackgroundCheck,2,Yes,No,,
+Ban Assault weapons,Freedom,Assault,2,Yes,No,,
+Marijuana,Freedom,Marijuana,4,Decriminalize,Legalize Medical,No Clear Policy,Against
+Patriot Act,Freedom,Patriot,3,Repeal,No Stance,Supports,
+Syria,Foreign Policy,Syria,2,Withdraw,Remain,,
+Saudi Arabia,Foreign Policy,Saudi,2,End Alliance,Mainitain Alliance,,
+Border Security,Foreign Policy,Wall,4,Improve Access to Temporary Work Visas,Keep Current State,Increase Border Security Without Wall, Build a Wall
+TPP,Foreign Policy,TPP,2,Oppose,Support,,
+National Defense Act for 2018,Foreign Policy,Defense,3,Against,No Vote,Supported,
