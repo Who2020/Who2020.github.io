@@ -24,7 +24,7 @@
 					for(var k = 0; k < policydata[j].size; k++) {
 						chosen.push(false);
 					}
-					totalcount = totalcount + 1 * policydata[j].size;
+					totalcount = totalcount + 1 * policydata[j].size + 1;
 				}
 				var counts = []
 				categories = Array.from(new Set(categories));
@@ -42,7 +42,7 @@
 				index = 0;
 				var h1 = d3.select('body').append('h1').style('font-size',50).style('color','#DDDDDD').attr('align','center').text('Results');
 				var svg = d3.select('body').append('center').append('svg')
-						.attr('viewBox', "0 0 100 250")
+						.attr('viewBox', "0 0 100 330")
 						.attr('preserveAspectRatio', "xMidYMid meet")
 						.attr('width', "100%");
 				var chars = "kLFwdhQutrZEy-8YseUz03Di4mqVCSvlAK9IP5RXpHG2jxbg_TnJMocf1BNaW67O";
@@ -85,13 +85,16 @@
 								{
 									var exists = false;
 									for(var m = 0; m < policydata[i].size; m++)
-										if(chosen[policydata[i].start + m])
+										if(chosen[policydata[i].start + 1 + m])
 											exists = true;
 									if(exists)
 									{
-										total++;
-										if(chosen[policydata[i].start+1*candidatedata[k][policydata[i].brief]])
-											matched++;
+										imp = 1;
+										if(chosen[1 * policydata[i].start])
+											imp = 3;
+										total+= imp;
+										if(chosen[policydata[i].start+1*candidatedata[k][policydata[i].brief] + 1])
+											matched+= imp;
 										var u = policydata[i].brief;
 										var v = candidatedata[k][policydata[i].brief];
 										var x = candidatedata[k].Name;
